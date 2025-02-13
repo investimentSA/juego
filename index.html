@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego Hipercasual</title>
+    <title>Juego Hipercasual Mejorado</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background-color: #87CEEB;
-            touch-action: none; /* Evita gestos indeseados */
+            touch-action: none;
         }
         canvas {
             display: block;
@@ -53,6 +53,19 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        // Cargar imágenes
+        const playerImage = new Image();
+        playerImage.src = 'player.png';  // Asegúrate de tener esta imagen en tu directorio
+
+        const obstacleImage = new Image();
+        obstacleImage.src = 'obstacle.png';  // Asegúrate de tener esta imagen en tu directorio
+
+        const enemyImage = new Image();
+        enemyImage.src = 'enemy.png';  // Asegúrate de tener esta imagen en tu directorio
+
+        const backgroundImage = new Image();
+        backgroundImage.src = 'background.png';  // Asegúrate de tener esta imagen en tu directorio
+
         let player = { x: 50, y: canvas.height / 2, width: 30, height: 30, dy: 0 };
         let gravity = 0.5;
         let jumpPower = -10;
@@ -70,13 +83,12 @@
         // Función para saltar
         function jump() {
             if (!gameOver && gameStarted) {
-                player.dy = jumpPower; // Si el juego está en curso, hace saltar al jugador
+                player.dy = jumpPower;
             }
         }
 
         // Función para iniciar el juego
         function startGame() {
-            // Restablecer todas las variables necesarias
             player.y = canvas.height / 2;
             player.dy = 0;
             obstacles = [];
@@ -85,20 +97,20 @@
             score = 0;
             gameOver = false;
 
-            startScreen.style.display = "none";  // Oculta la pantalla de inicio
-            gameOverScreen.style.display = "none";  // Oculta la pantalla de Game Over
+            startScreen.style.display = "none";
+            gameOverScreen.style.display = "none";
 
-            gameStarted = true;  // Indica que el juego ha comenzado
-            update(); // Empieza la actualización del juego
+            gameStarted = true;
+            update();
 
-            spawnObstacle();  // Inicia la generación de obstáculos
-            spawnEnemy();  // Inicia la generación de enemigos
+            spawnObstacle();
+            spawnEnemy();
         }
 
         // Muestra la pantalla de Game Over
         function gameOverScreenDisplay() {
             finalScore.textContent = score;
-            gameOverScreen.style.display = "block"; // Muestra la pantalla de Game Over
+            gameOverScreen.style.display = "block";
         }
 
         // Función para actualizar el estado del juego
@@ -106,16 +118,18 @@
             if (gameOver) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Fondo en movimiento
+            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
             player.dy += gravity;
             player.y += player.dy;
 
-            // Limita los movimientos para no salir del canvas
+            // Limita los movimientos del jugador dentro del canvas
             if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
             if (player.y < 0) player.y = 0;
 
-            // Dibuja al jugador
-            ctx.fillStyle = "red";
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+            // Dibuja al jugador con la imagen
+            ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
 
             // Dibuja los obstáculos
             obstacles.forEach((obstacle, index) => {
@@ -124,11 +138,10 @@
                     obstacles.splice(index, 1);
                     score++;
                     if (score % 10 === 0) {
-                        gameSpeed += 0.1; // Incrementa la velocidad del juego cada 10 puntos
+                        gameSpeed += 0.1;
                     }
                 }
-                ctx.fillStyle = "black";
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                ctx.drawImage(obstacleImage, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
 
                 // Verifica la colisión con los obstáculos
                 if (
@@ -138,7 +151,7 @@
                     player.y + player.height > obstacle.y
                 ) {
                     gameOver = true;
-                    setTimeout(gameOverScreenDisplay, 100);  // Muestra la pantalla de Game Over
+                    setTimeout(gameOverScreenDisplay, 100);
                 }
             });
 
@@ -148,8 +161,7 @@
                 if (enemy.x + enemy.width < 0) {
                     enemies.splice(index, 1);
                 }
-                ctx.fillStyle = "green";
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
 
                 // Verifica la colisión con los enemigos
                 if (
@@ -159,7 +171,7 @@
                     player.y + player.height > enemy.y
                 ) {
                     gameOver = true;
-                    setTimeout(gameOverScreenDisplay, 100);  // Muestra la pantalla de Game Over
+                    setTimeout(gameOverScreenDisplay, 100);
                 }
             });
 
@@ -168,7 +180,7 @@
             ctx.font = "20px Arial";
             ctx.fillText("Puntaje: " + score, 20, 30);
 
-            requestAnimationFrame(update); // Sigue actualizando el juego
+            requestAnimationFrame(update);
         }
 
         // Función para generar obstáculos
@@ -176,7 +188,7 @@
             if (gameOver) return;
             let height = Math.random() * (canvas.height / 2);
             obstacles.push({ x: canvas.width, y: canvas.height - height, width: 30, height: height });
-            setTimeout(spawnObstacle, 2000);  // Genera obstáculos cada 2 segundos
+            setTimeout(spawnObstacle, 2000);
         }
 
         // Función para generar enemigos
@@ -185,23 +197,23 @@
             let height = Math.random() * (canvas.height / 3);
             let width = 40 + Math.random() * 20;
             enemies.push({ x: canvas.width, y: canvas.height - height - 40, width: width, height: height });
-            setTimeout(spawnEnemy, 3000);  // Genera enemigos cada 3 segundos
+            setTimeout(spawnEnemy, 3000);
         }
 
         // Detecta el toque en la pantalla para móviles
         window.addEventListener("touchstart", (e) => {
-            e.preventDefault(); // Evita desplazamiento en móviles
+            e.preventDefault();
             if (gameOver) {
-                startGame(); // Reinicia el juego si ha terminado
+                startGame();
             } else if (!gameStarted) {
-                startGame(); // Inicia el juego si no ha comenzado
+                startGame();
             } else {
-                jump(); // Hace saltar al jugador si el juego está en curso
+                jump();
             }
         });
 
         // Muestra la pantalla de inicio
-        startScreen.style.display = "block"; // Muestra la pantalla de inicio
+        startScreen.style.display = "block";
 
         // Ajusta el tamaño del canvas al cambiar el tamaño de la pantalla
         window.addEventListener('resize', () => {
@@ -211,4 +223,3 @@
     </script>
 </body>
 </html>
-
