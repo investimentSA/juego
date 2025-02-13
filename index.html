@@ -87,8 +87,8 @@
             player.y = canvas.height / 2;
             player.dy = 0;
 
-            startScreen.style.display = "none";
-            gameOverScreen.style.display = "none";
+            startScreen.style.display = "none";  // Oculta la pantalla de inicio
+            gameOverScreen.style.display = "none";  // Oculta la pantalla de Game Over
             update();
             spawnObstacle();
             spawnEnemy();
@@ -97,7 +97,7 @@
         // Muestra la pantalla de Game Over
         function gameOverScreenDisplay() {
             finalScore.textContent = score;
-            gameOverScreen.style.display = "block";
+            gameOverScreen.style.display = "block"; // Muestra la pantalla de Game Over
         }
 
         // Función para actualizar el estado del juego
@@ -188,18 +188,15 @@
         // Detecta el toque en la pantalla para móviles
         window.addEventListener("touchstart", (e) => {
             e.preventDefault(); // Evita desplazamiento en móviles
-            jump();
+            if (!gameStarted) {
+                startGame(); // Inicia el juego si aún no ha comenzado
+            } else if (gameStarted && !gameOver) {
+                jump(); // Hace saltar al jugador si el juego está en curso
+            }
         });
 
         // Muestra la pantalla de inicio
-        startScreen.style.display = "block"; 
-
-        // Detecta el toque para reiniciar después de perder
-        window.addEventListener("touchstart", (e) => {
-            if (gameOver) {
-                startGame(); // Reinicia el juego
-            }
-        });
+        startScreen.style.display = "block"; // Muestra la pantalla de inicio
 
         // Ajusta el tamaño del canvas al cambiar el tamaño de la pantalla
         window.addEventListener('resize', () => {
