@@ -69,25 +69,26 @@
 
         // Función para saltar
         function jump() {
-            if (!gameOver && gameStarted) {
-                player.dy = jumpPower;
-            } else if (!gameStarted) {
-                startGame();
+            if (gameOver) {
+                startGame(); // Reinicia el juego si el juego ha terminado
+            } else if (!gameOver && gameStarted) {
+                player.dy = jumpPower; // Si el juego está en curso, hace saltar al jugador
             }
         }
 
         // Función para iniciar el juego
         function startGame() {
             gameStarted = true;
-            startScreen.style.display = "none";
-            gameOverScreen.style.display = "none";
+            gameOver = false;
             score = 0;
             gameSpeed = 3;
             obstacles = [];
             enemies = [];
             player.y = canvas.height / 2;
             player.dy = 0;
-            gameOver = false;
+
+            startScreen.style.display = "none";
+            gameOverScreen.style.display = "none";
             update();
             spawnObstacle();
             spawnEnemy();
