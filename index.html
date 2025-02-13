@@ -194,6 +194,13 @@
         // Muestra la pantalla de inicio
         startScreen.style.display = "block"; 
 
+        // Detecta el toque para reiniciar después de perder
+        window.addEventListener("touchstart", (e) => {
+            if (gameOver) {
+                startGame(); // Reinicia el juego
+            }
+        });
+
         // Ajusta el tamaño del canvas al cambiar el tamaño de la pantalla
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
