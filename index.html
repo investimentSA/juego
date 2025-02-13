@@ -107,6 +107,8 @@
 
             player.dy += gravity;
             player.y += player.dy;
+
+            // Limita los movimientos para no salir del canvas
             if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
             if (player.y < 0) player.y = 0;
 
@@ -173,7 +175,7 @@
             if (gameOver) return;
             let height = Math.random() * (canvas.height / 2);
             obstacles.push({ x: canvas.width, y: canvas.height - height, width: 30, height: height });
-            setTimeout(spawnObstacle, 2000);
+            setTimeout(spawnObstacle, 2000);  // Genera obstáculos cada 2 segundos
         }
 
         // Función para generar enemigos
@@ -182,7 +184,7 @@
             let height = Math.random() * (canvas.height / 3);
             let width = 40 + Math.random() * 20;
             enemies.push({ x: canvas.width, y: canvas.height - height - 40, width: width, height: height });
-            setTimeout(spawnEnemy, 3000);
+            setTimeout(spawnEnemy, 3000);  // Genera enemigos cada 3 segundos
         }
 
         // Detecta el toque en la pantalla para móviles
