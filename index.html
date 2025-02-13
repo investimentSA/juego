@@ -76,20 +76,23 @@
 
         // Función para iniciar el juego
         function startGame() {
-            gameStarted = true;
-            gameOver = false;
-            score = 0;
-            gameSpeed = 3;
-            obstacles = [];
-            enemies = [];
+            // Restablecer todas las variables necesarias
             player.y = canvas.height / 2;
             player.dy = 0;
+            obstacles = [];
+            enemies = [];
+            gameSpeed = 3;
+            score = 0;
+            gameOver = false;
 
             startScreen.style.display = "none";  // Oculta la pantalla de inicio
             gameOverScreen.style.display = "none";  // Oculta la pantalla de Game Over
-            update();
-            spawnObstacle();
-            spawnEnemy();
+
+            gameStarted = true;  // Indica que el juego ha comenzado
+            update(); // Empieza la actualización del juego
+
+            spawnObstacle();  // Inicia la generación de obstáculos
+            spawnEnemy();  // Inicia la generación de enemigos
         }
 
         // Muestra la pantalla de Game Over
@@ -135,7 +138,7 @@
                     player.y + player.height > obstacle.y
                 ) {
                     gameOver = true;
-                    setTimeout(gameOverScreenDisplay, 100);
+                    setTimeout(gameOverScreenDisplay, 100);  // Muestra la pantalla de Game Over
                 }
             });
 
@@ -156,7 +159,7 @@
                     player.y + player.height > enemy.y
                 ) {
                     gameOver = true;
-                    setTimeout(gameOverScreenDisplay, 100);
+                    setTimeout(gameOverScreenDisplay, 100);  // Muestra la pantalla de Game Over
                 }
             });
 
@@ -165,7 +168,7 @@
             ctx.font = "20px Arial";
             ctx.fillText("Puntaje: " + score, 20, 30);
 
-            requestAnimationFrame(update);
+            requestAnimationFrame(update); // Sigue actualizando el juego
         }
 
         // Función para generar obstáculos
