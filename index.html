@@ -188,9 +188,11 @@
         // Detecta el toque en la pantalla para móviles
         window.addEventListener("touchstart", (e) => {
             e.preventDefault(); // Evita desplazamiento en móviles
-            if (!gameStarted || gameOver) {
-                startGame(); // Reinicia el juego si aún no ha comenzado o si terminó
-            } else if (gameStarted && !gameOver) {
+            if (gameOver) {
+                startGame(); // Reinicia el juego si ha terminado
+            } else if (!gameStarted) {
+                startGame(); // Inicia el juego si no ha comenzado
+            } else {
                 jump(); // Hace saltar al jugador si el juego está en curso
             }
         });
